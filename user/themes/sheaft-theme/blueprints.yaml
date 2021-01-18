@@ -1,0 +1,18 @@
+name: Sheaft Theme
+slug: sheaft-theme
+type: theme
+version: 0.1.0
+description: Theme of the Sheaft Blog
+icon: rebel
+author:
+  name: Nyny
+  email: fanny.mugnier@outlook.com
+homepage: https://github.com/nyny/grav-theme-sheaft-theme
+demo: http://demo.yoursite.com
+keywords: grav, theme, etc
+bugs: https://github.com/nyny/grav-theme-sheaft-theme/issues
+readme: https://github.com/nyny/grav-theme-sheaft-theme/blob/develop/README.md
+license: MIT
+
+dependencies:
+  - { name: grav, version: '>=1.6.0' }

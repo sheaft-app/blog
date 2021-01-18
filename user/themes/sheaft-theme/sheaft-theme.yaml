@@ -1,0 +1,10 @@
+enabled: true
+
+streams:
+ schemes:
+   theme:
+     type: ReadOnlyStream
+     prefixes:
+       '':
+         - user/themes/sheaft-theme
+         - user/themes/soraarticle

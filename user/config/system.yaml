@@ -4,7 +4,7 @@ home:
   alias: '/home'
 
 pages:
-  theme: quark
+  theme: sheaft-theme
   markdown:
     extra: false
   process:
