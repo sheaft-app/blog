@@ -1,7 +1,17 @@
-title: Grav
+title: Sheaft, le Blog
+default_lang: fr
 author:
-  name: Joe Bloggs
-  email: 'joe@example.com'
+  name: Sheaft
+  email: 'contact@sheaft.com'
 metadata:
-    description: 'Grav is an easy to use, yet powerful, open source flat-file CMS'
-
+  description: 'Recettes, trucs et astuces, et actualité autour de la consommation locale'
+mainmenu:
+  - text: Accueil
+    url: page:accueil
+  - text: Contact
+    url:  page:contact
+copyright:
+  text1: Sheaft
+  year: 2021
+  url: https://www.sheaft.com/
+  text2: www.sheaft.com
