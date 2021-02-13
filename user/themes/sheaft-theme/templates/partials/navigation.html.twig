@@ -7,28 +7,31 @@
                 {% if item.url | contains('page:') %}
                     <li class='menu-item menu-item-type-post_type gdlr-normal-menu'><a href='{{ base_url_absolute }}/{{ item.url|replace({"page:":''}) }}'>{{ item.text }}</a></li>
                     {% else %}
-                    <li class='menu-item menu-item-type-post_type gdlr-normal-menu'><a href='{{ item.url }}'>{{ item.text }}</a></li>
+                    <li class='menu-item menu-item-type-post_type gdlr-normal-menu'><a href='{{ item.url }}' target="_blank">{{ item.text }}</a></li>
                 {% endif %}
             {% endfor %}
-    </ul></nav>
-    <div class='top-search-button' id='top-search-button'>
-        <i class='icon-search'></i>
+            </ul></nav>
+        <div class='top-search-button' id='top-search-button'>
+            <i class='icon-search'></i>
+        </div>
+        <div class='clear'></div>
+        </div>
     </div>
-    <div class='clear'></div></div>
-</div>
+
+    <div class='gdlr-nav-search-form' id='gdlr-nav-search-form'>
+        <div class='gdlr-nav-search-container container'>
+            <form>
+                <i class='icon-search'></i>
+                <div class='search-text' id='search-text2'>
+                    <input autocomplete='off' data-default='Rechercher...' name='q' type='text' value="{{ query }}" data-search-input2="{{ base_url_relative }}{{ config.plugins.simplesearch.route}}/query"/><input type='hidden' value='max-results=6'/>
+                </div>
+                <div class='clear'></div>
+            </form>
+        </div>
+    </div>
 </div>
 <div id='gdlr-navigation-substitute'></div>
-<div class='gdlr-nav-search-form' id='gdlr-nav-search-form'>
-    <div class='gdlr-nav-search-container container'>
-        <form>
-            <i class='icon-search'></i>
-            <div class='search-text' id='search-text2'>
-                <input autocomplete='off' data-default='Rechercher...' name='q' type='text' value="{{ query }}" data-search-input2="{{ base_url_relative }}{{ config.plugins.simplesearch.route}}/query"/><input type='hidden' value='max-results=6'/>
-            </div>
-            <div class='clear'></div>
-        </form>
-    </div>
-</div>
+
 
 <script>
 jQuery(document).ready(function($){

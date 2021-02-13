@@ -8,8 +8,10 @@ metadata:
 mainmenu:
   - text: Accueil
     url: page:accueil
-  - text: Contact
-    url:  page:contact
+  - text: Notre site
+    url: https://www.sheaft.com/
+  - text: Notre app
+    url: https://app.sheaft.com/
 copyright:
   text1: Sheaft
   year: 2021
