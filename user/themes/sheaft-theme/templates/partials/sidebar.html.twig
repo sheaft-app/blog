@@ -4,14 +4,6 @@
     {% endif %}
 {% endfor %}
 
-{% if config.plugins.simplesearch.enabled %}
-    <div class="widget HTML">
-        <h2 class="title">SimpleSearch</h2>
-        <div class="widget-content simplesearch">
-            {% include 'partials/simplesearch_searchbox.html.twig' %}
-        </div>
-    </div>
-{% endif %}
 {% if config.plugins.random.enabled %}
     <div class="widget HTML">
        <h2 class="title">Random Article</h2>

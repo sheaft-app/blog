@@ -384,9 +384,11 @@ display:none;
 /*--- footer ---*/
 .footer-wrapper{ position: relative; background-repeat: no-repeat; background-position: right top; }
 .footer-wrapper a { cursor: pointer; }
-.footer-wrapper .widget { margin-bottom: 60px; }
-.footer-wrapper h2 { margin-bottom: 30px; font-size: 14px; text-transform: uppercase; font-weight: 700; letter-spacing: 2px; }
-.footer-container{ padding-top: 60px; }
+.footer-wrapper .widget { margin-bottom: 30px; }
+.footer-wrapper h2 { margin-bottom: 8px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; }
+.footer-wrapper hr { margin: 8px 0 ; border-color: #525151; }
+.footer-wrapper .follow-socials {text-align: center;}
+.footer-container{ padding-top: 30px; }
 .ie7 .footer-wrapper{ overflow: hidden; }
 
 .copyright-left { margin: 0px 15px; float: left; }
@@ -2869,7 +2871,7 @@ input[type="text"], input[type="email"], input[type="password"], textarea{ color
 .footer-wrapper a:hover{ color: #cecece; }
 .footer-wrapper *{ border-color: #363636; }
 .footer-wrapper input[type="text"], .footer-wrapper input[type="email"], .footer-wrapper input[type="password"], .footer-wrapper textarea{ background-color: #141414; }
-.footer-wrapper input[type="text"], .footer-wrapper input[type="email"], .footer-wrapper input[type="password"], .footer-wrapper textarea{ color: #828282; }
+.footer-wrapper input[type="text"], .footer-wrapper input[type="email"], .footer-wrapper input[type="password"], .footer-wrapper textarea{ color: #cacaca; }
 .footer-wrapper input[type="text"], .footer-wrapper input[type="email"], .footer-wrapper input[type="password"], .footer-wrapper textarea{ border-color: #313131; }
 .footer-wrapper .gdlr-button, .footer-wrapper .gdlr-button:hover, .footer-wrapper input[type="button"], .footer-wrapper input[type="submit"]{ color: #ffffff; }
 .footer-wrapper input[type="button"], .footer-wrapper input[type="submit"]{ border-color: #ffffff; outline-color: #ffffff; }
