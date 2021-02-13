@@ -4,5 +4,6 @@ taxonomy:
     category: sidebar
 ---
 
-Au menu : recettes, trucs & astuces, tests, sujets d'actualité, etc.  
-Autour de l'alimentation mais également de la vie quotidienne, parce que la consommation locale ne s'arrête pas à ce que l'on met dans notre assiette !
+Vous trouverez ici des sujets divers et variés autour de la consommation locale et de Sheaft, l'association et l'application web : actualité, présentation de produits et de producteurs de nos régions, histoire et anecdotes de l'association, mais aussi tutoriels, recettes de cuisine, etc. 
+
+<p style="text-align: center;">Bonne lecture !</p>

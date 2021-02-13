@@ -359,6 +359,8 @@ display:none;
     border-bottom-width: 2px; border-bottom-style: solid; letter-spacing: 1px; }
 .gdlr-sidebar .widget { margin-bottom: 30px; padding: 35px 30px 20px; background-color:white;
     border-bottom-width: 3px; border-bottom-style: solid; text-align: center; box-shadow: #2c2c2c73 3px 3px 6px; }
+.widget p { text-align: justify; }
+.widget img { text-align: center; margin-bottom: 5px; }
 
 
 /*--- stunning-text ---*/

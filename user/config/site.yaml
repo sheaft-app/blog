@@ -4,7 +4,7 @@ author:
   name: Sheaft
   email: 'contact@sheaft.com'
 metadata:
-  description: 'Recettes, trucs et astuces, et actualité autour de la consommation locale'
+  description: "Blog autour de la consommation locale (actualité, présentation de produits et producteurs régionaux) et de Sheaft, l'association qui en facilite l'accès."
 mainmenu:
   - text: Accueil
     url: page:accueil
