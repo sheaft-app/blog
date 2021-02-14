@@ -398,6 +398,17 @@ display:none;
 .copyright-wrapper{ border-top-width: 0px; border-top-style: solid; }
 .copyright-container{ padding: 15px 0px; }
 
+.newsletter-subscribe { text-align: center; }
+.newsletter-subscribe p { text-align: justify; }
+.btn-footer {
+    background-color: #fff;
+    color: #212121;
+    letter-spacing: 1px;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%), 0 1px 2px 0 rgb(0 0 0 / 6%);
+    padding: 10px 20px;
+}
+
 /*--- shortcode ---*/
 .gdlr-shortcode-wrapper { margin-left: -15px; margin-right: -15px; }
 
@@ -2693,6 +2704,10 @@ html body{ min-width: 300px; }
 
     /* widget */
     .banner-widget1-4-wrapper .banner-widget1-4 { margin-bottom: 20px; }
+
+    /* footer */
+    .copyright-left { float: none; text-align: center; }
+    .copyright-right { float: none; text-align: center; }
 }
 
 /*--- mobile portrait style ---*/
@@ -2707,6 +2722,8 @@ html body{ min-width: 300px; }
 
     .gdlr-item-title-head .gdlr-flex-prev,
     .gdlr-item-title-head .gdlr-flex-next{ display: none; }
+    .copyright-left { float: none; text-align: center; }
+    .copyright-right { text-align: center; }
 }
 
 .body-wrapper.gdlr-pattern-background{ background-color:#FEE9C3; }
