@@ -60,3 +60,8 @@ languages:
   session_store_active: false
   http_accept_language: true
   override_locale: false
+
+strict_mode:
+  yaml_compat: true
+  twig_compat: true
+  
