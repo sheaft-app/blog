@@ -9,10 +9,10 @@
         
     {% include 'partials/blog_sidebar_header.html.twig' %}
 
-    <h1 class="search-header">Search Results</h1>
+    <h1 class="search-header">Résultats de recherche</h1>
     {% include 'partials/simplesearch_searchbox.html.twig' %}
 
-    <p><br />Query: <strong>{{ query }}</strong> found {{ search_results.count }} {{ 'result'|pluralize(search_results.count) }}</p>
+    <p><br />{{ search_results.count }} {{ 'résultat'|pluralize(search_results.count) }} {{ 'trouvé'|pluralize(search_results.count) }} pour : <strong>{{ query }}</strong>.</p>
 
     {% for page in search_results %}
         {% include 'partials/blog_item.html.twig' with {'page':page, 'truncate':true} %}

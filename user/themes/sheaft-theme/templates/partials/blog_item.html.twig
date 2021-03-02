@@ -39,8 +39,18 @@
                     <h3 class="gdlr-blog-title"><a href="{{ page.url }}">{{ page.title }}</a></h3>
                   {% endif %}
 
-                  <div class="blog-info blog-author"><i class="icon-user"></i>
-                          {{ page.header.author.name }}
+                  <div class="gdlr-blog-info gdlr-title-font gdlr-info">
+                    <div class="blog-info blog-author"><i class="icon-user"></i>
+                      {{ page.header.author.name }}
+                    </div>
+                    {% if page.taxonomy.tag %}
+                      <div class="blog-info blog-tag"><i class="icon-tags"></i>
+                      {% for tag in page.taxonomy.tag %}
+                        <a href="{{ base_url }}/tag{{ config.system.param_sep }}{{ tag }}" rel="tag">{{ tag }}</a>{% if not loop.last %}, {% endif %}
+                      {% endfor %}
+                      </div>
+                    {% endif %}
+                    <div class="clear"></div>
                   </div>
                 </header>
                 <div class="gdlr-blog-content">
@@ -59,16 +69,6 @@
                       {{ page.content }}
                       {% set show_prev_next = true %}
                       {% endif %}
-                      <div class="gdlr-blog-info gdlr-title-font gdlr-info">
-                        {% if page.taxonomy.tag %}
-                          <div class="blog-info blog-tag"><i class="icon-tags"></i>
-                          {% for tag in page.taxonomy.tag %}
-                            <a href="{{ base_url }}/tag{{ config.system.param_sep }}{{ tag }}" rel="tag">{{ tag }}</a>{% if not loop.last %}, {% endif %}
-                          {% endfor %}
-                          </div>
-                        {% endif %}
-                        <div class="clear"></div>
-                      </div>
 
                       <div class="gdlr-social-share">
                       <hr />
