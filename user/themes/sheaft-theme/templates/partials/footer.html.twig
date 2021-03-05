@@ -116,12 +116,7 @@
     <div class="copyright-wrapper">
         <div class="copyright-container container">
             <div class="copyright-left">
-                {% if site.copyright %}
-                    © {{ site.copyright.year }} {{ site.copyright.text1 }} | <a href="{{ site.copyright.url }}" target="_blank">{{ site.copyright.text2}}</a>
-                {% endif %}
-                {% if site.copyright2 %}
-                    {{ site.copyright2.text1 }} <a href="{{ site.copyright2.url }}">{{ site.copyright2.text2}}</a>
-                {% endif %}
+                {{ site.copyright.text1 }} © {{ site.copyright.year }} | <a href="{{ site.copyright.url }}" target="_blank">{{ site.copyright.text2}}</a> | <a href="{{ base_url_absolute }}/{{ site.legal_notices.url|replace({"page:":''}) }}">Mentions légales</a>
             </div>
             <div class="copyright-right">
                 <span id="mycontent">

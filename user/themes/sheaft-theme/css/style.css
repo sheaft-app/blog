@@ -6139,3 +6139,19 @@ float:left;
     background-color: #fff;
     color: #8c8c8c;
 }
+.legals {
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 50px;
+    background-color: #fff;
+    padding: 30px;
+    box-shadow: #2c2c2c73 3px 3px 6px;
+    text-align: justify;
+}
+.legals .title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.legals h2 {
+    margin-bottom: 5px;
+}
