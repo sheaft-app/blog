@@ -153,7 +153,7 @@ class Admin
             $directory = $managed ? $flex->getDirectory('user-accounts') : null;
 
             /** @var UserObject|null $test */
-            $test = $directory ? $directory->getObject($user->username) : null;
+            $test = $directory ? $directory->getObject(mb_strtolower($user->username)) : null;
             if ($test) {
                 $test = clone $test;
                 $test->access = $user->access;
@@ -246,23 +246,62 @@ class Admin
     /**
      * Return the found configuration blueprints
      *
+     * @param bool $checkAccess
      * @return array
      */
-    public static function configurations()
+    public static function configurations(bool $checkAccess = false): array
     {
-        $configurations = [];
+        $grav = Grav::instance();
+
+        /** @var Admin $admin */
+        $admin = $grav['admin'];
 
         /** @var UniformResourceIterator $iterator */
-        $iterator = Grav::instance()['locator']->getIterator('blueprints://config');
+        $iterator = $grav['locator']->getIterator('blueprints://config');
 
+        // Find all main level configuration files.
+        $configurations = [];
         foreach ($iterator as $file) {
             if ($file->isDir() || !preg_match('/^[^.].*.yaml$/', $file->getFilename())) {
                 continue;
             }
-            $configurations[] = $file->getBasename('.yaml');
+
+            $name = $file->getBasename('.yaml');
+
+            // Check that blueprint exists and is not hidden.
+            $data = $admin->getConfigurationData('config/'. $name);
+            if (!is_callable([$data, 'blueprints'])) {
+                continue;
+            }
+
+            $blueprint = $data->blueprints();
+            if (!$blueprint) {
+                continue;
+            }
+
+            $test = $blueprint->toArray();
+            if (empty($test['form']['hidden']) && (!empty($test['form']['field']) || !empty($test['form']['fields']))) {
+                $configurations[$name] = true;
+            }
         }
 
-        return $configurations;
+        // Remove scheduler and backups configs (they belong to the tools).
+        unset($configurations['scheduler'], $configurations['backups']);
+
+        // Sort configurations.
+        ksort($configurations);
+        $configurations = ['system' => true, 'site' => true] + $configurations + ['info' => true];
+
+        if ($checkAccess) {
+            // ACL checks.
+            foreach ($configurations as $name => $value) {
+                if (!$admin->authorize(['admin.configuration.' . $name, 'admin.super'])) {
+                    unset($configurations[$name]);
+                }
+            }
+        }
+
+        return array_keys($configurations);
     }
 
     /**
@@ -910,6 +949,141 @@ class Admin
         }
 
         return $data[$type];
+    }
+
+    /**
+     * Get configuration data.
+     *
+     * Note: If you pass $post, make sure you pass all the fields in the blueprint or data gets lost!
+     *
+     * @param string $type
+     * @param array|null  $post
+     *
+     * @return object
+     * @throws \RuntimeException
+     */
+    public function getConfigurationData($type, array $post = null)
+    {
+        static $data = [];
+
+        if (isset($data[$type])) {
+            return $data[$type];
+        }
+
+        // Check to see if a data type is plugin-provided, before looking into core ones
+        $event = $this->grav->fireEvent('onAdminData', new Event(['type' => &$type]));
+        if ($event) {
+            if (isset($event['data_type'])) {
+                return $event['data_type'];
+            }
+
+            if (is_string($event['type'])) {
+                $type = $event['type'];
+            }
+        }
+
+        /** @var UniformResourceLocator $locator */
+        $locator  = $this->grav['locator'];
+        $filename = $locator->findResource("config://{$type}.yaml", true, true);
+        $file     = CompiledYamlFile::instance($filename);
+
+        if (preg_match('|plugins/|', $type)) {
+            $obj = Plugins::get(preg_replace('|plugins/|', '', $type));
+            if (null === $obj) {
+                return [];
+            }
+
+            if ($post) {
+                $obj = $this->mergePost($obj, $post);
+            }
+
+            $obj->file($file);
+
+            $data[$type] = $obj;
+        } elseif (preg_match('|themes/|', $type)) {
+            /** @var Themes $themes */
+            $themes = $this->grav['themes'];
+            $obj = $themes->get(preg_replace('|themes/|', '', $type));
+            if (null === $obj) {
+                return [];
+            }
+
+            if ($post) {
+                $obj = $this->mergePost($obj, $post);
+            }
+
+            $obj->file($file);
+
+            $data[$type] = $obj;
+        } elseif (preg_match('|users?/|', $type)) {
+            /** @var UserCollectionInterface $users */
+            $users = $this->grav['accounts'];
+
+            $obj = $users->load(preg_replace('|users?/|', '', $type));
+            $obj->update($this->cleanUserPost($post));
+
+            $data[$type] = $obj;
+        } elseif (preg_match('|config/|', $type)) {
+            $type       = preg_replace('|config/|', '', $type);
+            $blueprints = $this->blueprints("config/{$type}");
+
+            $config = $this->grav['config'];
+            $obj = new Data\Data($config->get($type, []), $blueprints);
+            if ($post) {
+                $obj = $this->mergePost($obj, $post);
+            }
+
+            // FIXME: We shouldn't allow user to change configuration files in system folder!
+            $filename = $this->grav['locator']->findResource("config://{$type}.yaml")
+                ?: $this->grav['locator']->findResource("config://{$type}.yaml", true, true);
+            $file     = CompiledYamlFile::instance($filename);
+            $obj->file($file);
+            $data[$type] = $obj;
+        } elseif (preg_match('|media-manager/|', $type)) {
+            $filename = base64_decode(preg_replace('|media-manager/|', '', $type));
+
+            $file = File::instance($filename);
+
+            $pages = static::enablePages();
+
+            $obj = new \stdClass();
+            $obj->title = $file->basename();
+            $obj->path = $file->filename();
+            $obj->file = $file;
+            $obj->page = $pages->get(dirname($obj->path));
+
+            $fileInfo = pathinfo($obj->title);
+            $filename = str_replace(['@3x', '@2x'], '', $fileInfo['filename']);
+            if (isset($fileInfo['extension'])) {
+                $filename .= '.' . $fileInfo['extension'];
+            }
+
+            if ($obj->page && isset($obj->page->media()[$filename])) {
+                $obj->metadata = new Data\Data($obj->page->media()[$filename]->metadata());
+            }
+
+            $data[$type] = $obj;
+        } else {
+            throw new \RuntimeException("Data type '{$type}' doesn't exist!");
+        }
+
+        return $data[$type];
+    }
+
+    protected function mergePost(Data\Data $object, array $post)
+    {
+        $object->merge($post);
+
+        $blueprint = $object->blueprints();
+        $data = $blueprint->flattenData($post, true);
+
+        foreach ($data as $key => $val) {
+            if ($val === null) {
+                $object->set($key, $val);
+            }
+        }
+
+        return $object;
     }
 
     /**

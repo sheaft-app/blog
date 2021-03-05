@@ -158,7 +158,8 @@ class AdminController extends AdminBaseController
     protected function taskSaveDefault()
     {
         // Handle standard data types.
-        $obj = $this->prepareData((array)$this->data);
+        $type = $this->getDataType();
+        $obj = $this->admin->getConfigurationData($type, $this->data);
 
         try {
             $obj->validate();
@@ -807,7 +808,7 @@ class AdminController extends AdminBaseController
         $this->grav['themes']->get($name);
 
         // Store system configuration.
-        $system = $this->admin->data('config/system');
+        $system = $this->admin->getConfigurationData('config/system');
         $system->set('pages.theme', $name);
         $system->save();
 
@@ -2224,7 +2225,8 @@ class AdminController extends AdminBaseController
             return false;
         }
 
-        $media = $this->getMedia();
+        $page = $this->admin->page($this->route);
+        $media = $page ? $this->getMedia($page) : null;
         if (!$media) {
             $this->admin->json_response = [
                 'status' => 'error',
@@ -2271,11 +2273,8 @@ class AdminController extends AdminBaseController
             }
         }
 
-        $page = $this->admin->page(true);
-        if ($page) {
-            // DEPRECATED: page
-            $this->grav->fireEvent('onAdminAfterAddMedia', new Event(['object' => $page, 'page' => $page]));
-        }
+        // DEPRECATED: page
+        $this->grav->fireEvent('onAdminAfterAddMedia', new Event(['object' => $page, 'page' => $page]));
 
         $this->admin->json_response = [
             'status'  => 'success',
@@ -2319,7 +2318,6 @@ class AdminController extends AdminBaseController
 
         echo json_encode($json_response);
         exit;
-
     }
 
     /**
@@ -2348,7 +2346,6 @@ class AdminController extends AdminBaseController
 
         echo json_encode($json_response);
         exit;
-
     }
 
     /**
@@ -2364,8 +2361,9 @@ class AdminController extends AdminBaseController
             return false;
         }
 
-        $media = $this->getMedia();
-        if (!$media) {
+        $page = $this->admin->page($this->route);
+        $media = $page ? $this->getMedia($page) : null;
+        if (null === $media) {
             $this->admin->json_response = [
                 'status'  => 'error',
                 'message' => $this->admin::translate('PLUGIN_ADMIN.NO_PAGE_FOUND')
@@ -2446,11 +2444,8 @@ class AdminController extends AdminBaseController
             return false;
         }
 
-        $page = $this->admin->page(true);
-        if ($page) {
-            // DEPRECATED: page
-            $this->grav->fireEvent('onAdminAfterDelMedia', new Event(['object' => $page, 'page' => $page]));
-        }
+        // DEPRECATED: page
+        $this->grav->fireEvent('onAdminAfterDelMedia', new Event(['object' => $page, 'page' => $page, 'media' => $media, 'filename' => $filename]));
 
         $this->admin->json_response = [
             'status'  => 'success',
@@ -2639,11 +2634,17 @@ class AdminController extends AdminBaseController
     /**
      * Get page media.
      *
+     * @param PageInterface|null $page
      * @return Media|null
      */
-    public function getMedia()
+    public function getMedia(PageInterface $page = null)
     {
         if ($this->view !== 'media') {
+            return null;
+        }
+
+        $page = $page ?? $this->admin->page($this->route);
+        if (!$page) {
             return null;
         }
 
@@ -2653,11 +2654,6 @@ class AdminController extends AdminBaseController
         $order = $this->uri->post('order') ?: null;
         if ($order && is_string($order)) {
             $order = array_map('trim', explode(',', $order));
-        }
-
-        $page = $this->admin->page($this->route);
-        if (!$page) {
-            return null;
         }
 
         $blueprints = $page->blueprints();
@@ -2692,6 +2688,14 @@ class AdminController extends AdminBaseController
     }
 
     /**
+     * @return string
+     */
+    protected function getDataType()
+    {
+        return trim("{$this->view}/{$this->admin->route}", '/');
+    }
+
+    /**
      * Gets the configuration data for a given view & post
      *
      * @param array $data
@@ -2699,10 +2703,9 @@ class AdminController extends AdminBaseController
      */
     protected function prepareData(array $data)
     {
-        $type = trim("{$this->view}/{$this->admin->route}", '/');
-        $data = $this->admin->data($type, $data);
+        $type = $this->getDataType();
 
-        return $data;
+        return $this->admin->data($type, $data);
     }
 
     /**

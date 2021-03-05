@@ -465,13 +465,12 @@ class AdminPlugin extends Plugin
      */
     public function onAdminTools(Event $event)
     {
-        $lang = $this->grav['language'];
         $event['tools'] = array_merge($event['tools'], [
-            'backups'        => [['admin.maintenance', 'admin.super'], $lang->translate('PLUGIN_ADMIN.BACKUPS')],
-            'scheduler'      => [['admin.super'], $lang->translate('PLUGIN_ADMIN.SCHEDULER')],
-            'logs'           => [['admin.super'], $lang->translate('PLUGIN_ADMIN.LOGS')],
-            'reports'        => [['admin.super'], $lang->translate('PLUGIN_ADMIN.REPORTS')],
-            'direct-install' => [['admin.super'], $lang->translate('PLUGIN_ADMIN.DIRECT_INSTALL')],
+            'backups'        => [['admin.maintenance', 'admin.super'], 'PLUGIN_ADMIN.BACKUPS'],
+            'scheduler'      => [['admin.super'], 'PLUGIN_ADMIN.SCHEDULER'],
+            'logs'           => [['admin.super'], 'PLUGIN_ADMIN.LOGS'],
+            'reports'        => [['admin.super'], 'PLUGIN_ADMIN.REPORTS'],
+            'direct-install' => [['admin.super'], 'PLUGIN_ADMIN.DIRECT_INSTALL'],
         ]);
 
         return $event;
@@ -858,6 +857,9 @@ class AdminPlugin extends Plugin
             'authorize' => [
                 'admin.configuration.system',
                 'admin.configuration.site',
+                'admin.configuration.media',
+                'admin.configuration.security',
+                'admin.configuration.info',
                 'admin.super'],
             'priority' => 9
         ];
@@ -1064,6 +1066,9 @@ class AdminPlugin extends Plugin
         // Double check we have system.yaml, site.yaml etc
         $config_path = $this->grav['locator']->findResource('user://config');
         foreach ($this->admin::configurations() as $config_file) {
+            if ($config_file === 'info') {
+                continue;
+            }
             $config_file = "{$config_path}/{$config_file}.yaml";
             if (!file_exists($config_file)) {
                 touch($config_file);
