@@ -3,7 +3,7 @@
 /**
  * @package    Grav\Common\Language
  *
- * @copyright  Copyright (C) 2015 - 2020 Trilby Media, LLC. All rights reserved.
+ * @copyright  Copyright (c) 2015 - 2021 Trilby Media, LLC. All rights reserved.
  * @license    MIT License; see LICENSE file for details.
  */
 
@@ -39,7 +39,7 @@ class Language
     /** @var array */
     protected $fallback_extensions = [];
     /** @var array */
-    protected $page_extesions = [];
+    protected $page_extensions = [];
     /** @var string|false */
     protected $default;
     /** @var string|false */
@@ -400,7 +400,7 @@ class Language
     {
         $this->fallback_languages = [];
         $this->fallback_extensions = [];
-        $this->page_extesions = [];
+        $this->page_extensions = [];
     }
 
     /**
