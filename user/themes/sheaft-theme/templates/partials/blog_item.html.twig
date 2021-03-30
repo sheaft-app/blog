@@ -9,7 +9,7 @@
               {{ page.date|date("d") }}
             </div>
             <div class="blog-date-month">
-              {{ "%b"|strftime(page.date) | convert_encoding('UTF-8', 'ISO-8859-1')}}
+              {{ page.date|localizeddate('long', 'none', 'fr', 'Europe/Paris', 'MMM') }}
             </div>
             <div class="blog-date-year">
               {{ page.date|date("Y") }}

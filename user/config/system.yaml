@@ -8,7 +8,7 @@ home:
 pages:
   theme: sheaft-theme
   dateformat:
-    default: 'H:i d/m/Y'
+    default: 'Y-m-d'
     
   markdown:
     extra: false
